@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Villo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  </header>
+  <main>
+    <div class="controls">
+      <label for="filter">Filter op gemeente:</label>
+      <select id="filter">
+        <option value="">-- Alle --</option>
+      </select>
+
+      <label for="sort">Sorteer op:</label>
+      <select id="sort">
+        <option value="name">Naam (A-Z)</option>
+        <option value="distance">Afstand</option>
+      </select>
+    </div>
+
+    <div id="locations"></div>
+
+    <section id="favorites">
+      <h2>Favorieten</h2>
+      <div id="favoriteList"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

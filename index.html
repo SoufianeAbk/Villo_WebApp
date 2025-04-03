@@ -7,7 +7,11 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <header>
+    <h1>Villo-fietsstations in Brussel</h1>
+    <button id="themeToggle">🌙</button>
   </header>
+  
   <main>
     <div class="controls">
       <label for="filter">Filter op gemeente:</label>
@@ -28,7 +32,19 @@
       <h2>Favorieten</h2>
       <div id="favoriteList"></div>
     </section>
-  </main>
+
+    <section id="feedback">
+      <h2>Geef feedback</h2>
+      <form id="feedbackForm">
+        <textarea id="feedbackInput" rows="4" placeholder="Wat wil je ons laten weten?" required></textarea>
+        <button type="submit">Sturen</button>
+      </form>
+      
+      <!-- Bericht na verzending -->
+      <p id="feedbackMessage" style="display: none; color: green; font-weight: bold; margin-top: 0.5rem;">Bedankt voor uw feedback!</p>
+    
+      <div id="feedbackList"></div>
+    </section>    
 
   <script src="script.js"></script>
 </body>

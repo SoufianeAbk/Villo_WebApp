@@ -1,3 +1,18 @@
+// 🌙 Dark mode toggle met onthouden in localStorage
+const toggle = document.getElementById('themeToggle');
+
+// Check of gebruiker eerder dark mode aanzette
+if (localStorage.getItem('theme') === 'dark') {
+  document.body.classList.add('dark');
+}
+
+// Toggle dark mode en sla op in localStorage
+toggle.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+  const isDark = document.body.classList.contains('dark');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+});
+
 const API_URL = 'https://bruxellesdata.opendatasoft.com/api/explore/v2.1/catalog/datasets/stations-villo-bruxelles-rbc/records?limit=20';
 let allLocations = [];
 let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -31,10 +46,10 @@ function getDistance(lat1, lon1, lat2, lon2) {
   const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
             Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 }
 
@@ -72,6 +87,7 @@ function renderLocations() {
       <button onclick='addFavorite(${JSON.stringify(loc)})'>Toevoegen aan favorieten</button>
     `;
     container.appendChild(div);
+    setTimeout(() => div.classList.add('visible'), 50);
   });
 }
 
@@ -101,6 +117,9 @@ function renderFavorites() {
       <button onclick='removeFavorite("${loc.villo_id}")'>Verwijder uit favorieten</button>
     `;
     container.appendChild(div);
+    
+    // Zorg dat de favoriet ook zichtbaar wordt
+    setTimeout(() => div.classList.add('visible'), 50);
   });
 }
 
@@ -110,10 +129,55 @@ if (navigator.geolocation) {
       lat: position.coords.latitude,
       lon: position.coords.longitude
     };
+    renderLocations(); // update sortering zodra locatie bekend is
+  });
+}
+let feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
+
+function renderFeedback() {
+  const container = document.getElementById('feedbackList');
+  container.innerHTML = '';
+  feedbacks.forEach((text, index) => {
+    const div = document.createElement('div');
+    div.className = 'location';
+    div.innerHTML = `
+      <p>${text}</p>
+      <button class="removeFeedback" onclick="removeFeedback(${index})">Verwijder</button>
+    `;
+    container.appendChild(div);
+    setTimeout(() => div.classList.add('visible'), 50);
   });
 }
 
+function removeFeedback(index) {
+  feedbacks.splice(index, 1);
+  localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+  renderFeedback();
+}
+
+document.getElementById('feedbackForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const input = document.getElementById('feedbackInput');
+  const text = input.value.trim();
+  const message = document.getElementById('feedbackMessage');
+  
+  if (text) {
+    feedbacks.push(text);
+    localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+    input.value = '';
+    renderFeedback();
+
+    // Toon bevestigingsbericht
+    message.style.display = 'block';
+
+    // Verberg het bericht automatisch na 3 seconden (optioneel)
+    setTimeout(() => {
+      message.style.display = 'none';
+    }, 3000);
+  }
+});
 document.getElementById('filter').addEventListener('change', renderLocations);
 document.getElementById('sort').addEventListener('change', renderLocations);
 
 fetchLocations();
+renderFeedback();

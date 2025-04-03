@@ -41,3 +41,4 @@ JavaScript – geen externe libraries
 localStorage API – voor het onthouden van thema, favorieten en feedback
 Geolocation API – voor afstandsberekening tot stations
 OpenData API – voor dynamische data van Villo-stations
+![image](https://github.com/user-attachments/assets/6fde9a4e-68e7-4265-a1ad-3513a0a81441)
